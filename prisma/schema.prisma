@@ -17,12 +17,13 @@ model User {
   updatedAt             DateTime   @updatedAt
   accounts              Account[]
   sessions              Session[]
+  stripeCustomerId      String?
   @@map("users")
 }
 model Account {
   id                 String    @id @default(cuid())
-  userId              String    @map("user_id")
-  type                 String?
+  userId             String    @map("user_id")
+  type               String?
   provider           String    @unique
   providerAccountId  String    @map("providerAccountId") @unique
   token_type         String?
@@ -30,7 +31,7 @@ model Account {
   access_token       String?   @db.Text
   expires_at         Int?
   scope              String?
-  id_token           String? @db.Text
+  id_token           String?   @db.Text
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
   user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -45,7 +46,7 @@ model Session {
   sessionToken String   @db.Text @map("session_token") @unique
   accessToken  String?  @db.Text @map("access_token")
   expires      DateTime
-  user         User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
